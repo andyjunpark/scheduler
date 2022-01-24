@@ -1,7 +1,37 @@
 export function getAppointmentsForDay(state, day) {
-  const appointmentsForDay = state.days.filter(days => days.name === day)
-  if (appointmentsForDay.length === 0) {
-    return [];
+  let appointments = [];
+
+  for (const eachDay of state.days) {
+    if (eachDay.name === day) {
+      eachDay.appointments.forEach(appointment => {
+        appointments.push(state.appointments[appointment]);
+      })
+      return appointments;
+    }
   }
-return appointmentsForDay[0].appointments.map(appointment => state.appointments[appointment]);
+  return appointments;
+}
+
+export function getInterview(state, interview) {
+  if (interview) {
+    return {
+      student: interview.student,
+      interviewer: state.interviewers[interview.interviewer]
+    };
+  }
+  return null;
+}
+
+export function getInterviewersForDay(state, day) {
+  let interviewers = [];
+
+  for (const eachDay of state.days) {
+    if (eachDay.name === day) {  
+      eachDay.interviewers.forEach(interview => {
+        interviewers.push(state.interviewers[interview]);
+      })
+      return interviewers;
+    }
+  }
+  return interviewers;
 }
