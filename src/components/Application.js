@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import DayList from './DayList';
 import Appointment from './Appointment/index.js';
 import axios from 'axios';
-import { getAppointmentsForDay, getInterview } from 'helpers/selectors';
+import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "helpers/selectors";
 
 import "components/Application.scss";
 
@@ -26,20 +26,39 @@ export default function Application(props) {
   },[])
 
   const dailyAppointments = getAppointmentsForDay(state, state.day);
+  const setDay = (day) => setState({ ...state, day });
 
   const getDailyAppointments = dailyAppointments.map((appointment) => {
     const interview = getInterview(state, appointment.interview);
+    const interviewers = getInterviewersForDay(state, state.day);
     return (
       <Appointment
         key={appointment.id}
         id={appointment.id}
         time={appointment.time}
-        interview={interview}  
+        interview={interview}
+        interviewers={interviewers} 
       />
     )
   });
+  // getDailyAppointments.push(<Appointment key="last" time="5pm" />);
 
-  const setDay = (day) => setState({ ...state, day });
+  function bookInterview(id, interview) {
+    console.log(id, interview);
+    const appointment = {
+      ...state.appointments[id],
+      interview: { ...interview }
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+    return axios
+      .put(`/api/appointments/${id}`, appointment)
+      .then((response) => {
+        setState({ ...state, appointments });
+      })
+  }
 
   return (
     <main className="layout">
@@ -53,7 +72,7 @@ export default function Application(props) {
         <nav className="sidebar__menu">
           <DayList
             days={state.days}
-            day={state.day}
+            value={state.day}
             onChange={setDay}
           />
         </nav>

@@ -1,13 +1,31 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 export default function useVisualMode(initial) {
   const [mode, setMode] = useState(initial);
+  const [history, setHistory] = useState([initial]);
 
-  return { mode };
-}
+  function transition(newMode, replace = false) {
+    setMode(newMode);
 
-function useCustomHook() {
-  function action() {}
+    if (replace) {
+      const newHistory = history.slice(0, history.length - 1);
+      setHistory([...newHistory, newMode]);
+    } else {
+      setHistory([...history, newMode]);
+    }
+  }
 
-  return { action };
-}
+  function back() {
+    if (history.length >= 1) {
+      const newHistory = [...history];
+      console.log(newHistory);
+      newHistory.pop();
+      console.log(newHistory);
+
+      setMode(history[newHistory.length - 1]);
+      setHistory(newHistory);
+    }
+  }
+
+  return { mode, transition, back };
+} 
