@@ -17,7 +17,8 @@ const EDIT = "EDIT";
 const SAVING = "SAVING";
 const DELETING = "DELETING";
 const CONFIRM = "CONFIRM";
-const ERROR = "ERROR"
+const ERROR_SAVE = "ERROR_SAVE";
+const ERROR_DELETE = "ERROR_DELETE";
 
 export default function Appointment(props) {
   const {time, interview, interviewers} = props;
@@ -32,16 +33,18 @@ export default function Appointment(props) {
       return;
     }
     transition(SAVING, true);
-    props.bookInterview(props.id, interview)
+    props
+      .bookInterview(props.id, interview)
       .then(() => transition(SHOW))
-      .catch((err) => transition(ERROR, true));
+      .catch((error) => transition(ERROR_SAVE, true));
   }
   
   function cancelInterview() {
     transition(DELETING, true);
-    props.cancelInterview(props.id)
+    props
+      .cancelInterview(props.id)
       .then(() => transition(EMPTY))
-      .catch((err) => transition(ERROR, true));
+      .catch((error) => transition(ERROR_DELETE, true));
   }
   
   function confirm() {
@@ -62,8 +65,8 @@ export default function Appointment(props) {
       {mode === EDIT && <Form student={interview.student} interviewer={interview.interviewer} interviewers={interviewers} onSave={save} onCancel={back} />}
       {mode === SAVING && <Status message="Please wait" />}
       {mode === CONFIRM && <Confirm message="Are you sure?" onCancel={back} onConfirm={cancelInterview} />}
-      {mode === ERROR && <Error message={"Could not cancel/save appointment."} onClose={back}/>}
-      
+      {mode === ERROR_SAVE && <Error onClose={() => back()} message="Could not save appointment." />}
+      {mode === ERROR_DELETE && <Error onClose={() => back()} message="Could not cancel appointment." />}
     </article>
   );
 }
