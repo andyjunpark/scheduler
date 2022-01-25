@@ -10,9 +10,9 @@ import Status from "./Status";
 import Confirm from "./Confirm";
 import Error from "./Error";
 
+const CREATE = "CREATE";
 const EMPTY = "EMPTY";
 const SHOW = "SHOW";
-const CREATE = "CREATE";
 const EDIT = "EDIT";
 const SAVING = "SAVING";
 const DELETING = "DELETING";
@@ -37,9 +37,9 @@ export default function Appointment(props) {
       .catch((err) => transition(ERROR, true));
   }
   
-  function cancel() {
+  function cancelInterview() {
     transition(DELETING, true);
-    props.cancel(props.id)
+    props.cancelInterview(props.id)
       .then(() => transition(EMPTY))
       .catch((err) => transition(ERROR, true));
   }
@@ -55,13 +55,13 @@ export default function Appointment(props) {
   return (
     <article className="appointment">
       <Header time={time} />
+      {mode === CREATE && <Form interviewers={interviewers} onSave={save} onCancel={() => back()} />}
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
       {mode === DELETING && <Status message="Deleting" />}
       {mode === SHOW && <Show student={interview.student} interviewer={interview.interviewer} onEdit={edit} onDelete={confirm} />}
-      {mode === CREATE && <Form interviewers={interviewers} onSave={save} onCancel={() => back()} />}
       {mode === EDIT && <Form student={interview.student} interviewer={interview.interviewer} interviewers={interviewers} onSave={save} onCancel={back} />}
       {mode === SAVING && <Status message="Please wait" />}
-      {mode === CONFIRM && <Confirm message="Are you sure?" onCancel={back} onConfirm={cancel} />}
+      {mode === CONFIRM && <Confirm message="Are you sure?" onCancel={back} onConfirm={cancelInterview} />}
       {mode === ERROR && <Error message={"Could not cancel/save appointment."} onClose={back}/>}
       
     </article>
