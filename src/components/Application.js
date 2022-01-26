@@ -16,7 +16,6 @@ export default function Application(props) {
     
 
   const dailyAppointments = getAppointmentsForDay(state, state.day);
-  const dailyInterviewers = getInterviewersForDay(state, state.day);
 
   const getDailyAppointments = dailyAppointments.map((appointment) => {
     const interview = getInterview(state, appointment.interview);
@@ -29,12 +28,11 @@ export default function Application(props) {
         time={appointment.time}
         bookInterview={bookInterview}
         cancelInterview={cancelInterview}
-        interview={getInterview(state, appointment.interview)}
+        interview={interview}
         interviewers={interviewers} 
       />
     )
   });
-  // getDailyAppointments.push(<Appointment key="last" time="5pm" />);
 
   return (
     <main className="layout">
