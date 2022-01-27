@@ -27,12 +27,10 @@ export default function useApplicationData() {
     const getDays = state.days.filter(day => day.name === state.day);
     const getAppointments = getDays[0].appointments;
     const availableSpots = getAppointments.filter(spot => !appointments[spot].interview).length;
-    console.log(availableSpots);
     return availableSpots;
   }
 
   function bookInterview(id, interview) {
-    console.log(id, interview);
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }
