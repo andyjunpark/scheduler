@@ -9,24 +9,21 @@ export default function useVisualMode(initial) {
   // transition to a new view
   function transition(newMode, replace = false) {
     setMode(newMode);
-  
-    // create history to prevent loading view
+
     if (replace) {
-      const newHistory = history.slice(0, history.length - 1);
-      setHistory([...newHistory, newMode]);
+      setHistory(prev => [...prev.slice(0, -1), newMode]);
+    
     } else {
-      setHistory([...history, newMode]);
+      setHistory(prev => [...prev, newMode]);
     }
   }
 
   // go back to preveiw
   function back() {
-    if (history.length >= 1) {
-      const newHistory = [...history];
-      newHistory.pop();
-
+    if (history.length > 1) {
+      const newHistory = history.slice(0, -1);
       setMode(history[newHistory.length - 1]);
-      setHistory(newHistory);
+      setHistory(prev => [...prev.slice(0, -1)]);
     }
   }
 
