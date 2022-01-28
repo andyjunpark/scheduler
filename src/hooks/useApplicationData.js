@@ -3,6 +3,7 @@ import axios from "axios";
 
 export default function useApplicationData() {
 
+  // set and use state
   const [state, setState] = useState({
     day: "Monday",
     days: [],
@@ -12,6 +13,7 @@ export default function useApplicationData() {
 
   const setDay = (day) => setState({ ...state, day });
 
+  // axios GET requests to fetch server data
   useEffect(() => {
     
     Promise.all([
@@ -23,6 +25,7 @@ export default function useApplicationData() {
     });
   },[])
 
+  // get length of available spots
   const getSpots = (state, appointments) => {
     const getDays = state.days.filter(day => day.name === state.day);
     const getAppointments = getDays[0].appointments;
@@ -30,6 +33,7 @@ export default function useApplicationData() {
     return availableSpots;
   }
 
+  // axios PUT requests to update server data
   function bookInterview(id, interview) {
     const appointment = {
       ...state.appointments[id],
@@ -63,6 +67,7 @@ export default function useApplicationData() {
       })
   }
 
+  // axios DELETE request to destroy and update server data
   function cancelInterview(id) {
     return axios
       .delete(`/api/appointments/${id}`)

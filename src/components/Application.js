@@ -1,9 +1,16 @@
 import React from "react";
+
+// Components
 import DayList from './DayList';
 import Appointment from './Appointment/index.js';
+
+// Hooks
 import useApplicationData from "hooks/useApplicationData";
+
+// Selectors
 import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "helpers/selectors";
 
+// Stylesheet
 import "components/Application.scss";
 
 export default function Application(props) {
@@ -34,6 +41,7 @@ export default function Application(props) {
     )
   });
 
+  // render
   return (
     <main className="layout">
       <section className="sidebar">
