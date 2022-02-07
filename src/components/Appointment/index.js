@@ -62,7 +62,7 @@ export default function Appointment(props) {
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
       {mode === DELETING && <Status message="Deleting" />}
       {mode === SHOW && <Show student={interview.student} interviewer={interview.interviewer} onEdit={edit} onDelete={confirm} />}
-      {mode === EDIT && <Form student={interview.student} interviewer={interview.interviewer} interviewers={interviewers} onSave={save} onCancel={back} />}
+      {mode === EDIT && <Form student={interview.student} interviewer={interview.interviewer.id} interviewers={interviewers} onSave={save} onCancel={back} />}
       {mode === SAVING && <Status message="Please wait" />}
       {mode === CONFIRM && <Confirm message="Are you sure?" onCancel={back} onConfirm={cancelInterview} />}
       {mode === ERROR_SAVE && <Error onClose={() => back()} message="Could not save appointment." />}
